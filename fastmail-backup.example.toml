@@ -1,0 +1,72 @@
+# ============================================================
+# fastmail-backup configuration (example)
+#
+# 1. Copy this file to fastmail-backup.toml (same folder as the script)
+# 2. Fill in your values
+# 3. Keep the real file ONLY on encrypted storage (e.g. a VeraCrypt
+#    container). It holds your app passwords / API token in plain text.
+#    Never commit it; .gitignore already excludes it.
+#
+# Strings in 'single quotes' are taken literally (no escaping needed).
+# ============================================================
+
+
+# Where output goes. Relative paths are relative to this folder, so the
+# container's drive letter doesn't matter. Absolute paths also work.
+# (These must stay above the first [section] header.)
+output_dir = '.'       # MailExport/, CalendarExport/, ... are created here
+log_dir    = 'logs'
+
+
+[account]
+# Your Fastmail login address. Needed for anything using an app password.
+user = 'you@yourdomain.com'
+
+
+[components]
+# Turn each export on or off. Use --only on the command line to run a
+# subset just once (e.g. --only mail,contacts).
+mail      = true
+calendars = true
+contacts  = true
+aliases   = true
+
+
+[mail]
+# Folders to skip. Matches a top-level folder (and everything under it)
+# or a full path like 'Archive/2019'. Trash is also matched by its role,
+# so it's skipped even if renamed.
+exclude_folders = ['Trash']
+
+
+[auth]
+# How to log in. See the README for which credentials each mode needs.
+#
+#   'separate'  (default, least privilege)
+#       mail      -> IMAP    with mail_app_password
+#       calendars -> CalDAV  with caldav_app_password
+#       contacts  -> CardDAV with carddav_app_password
+#       aliases   -> API     with api_token
+#
+#   'single'    one app password with "Mail, Contacts & Calendars" access
+#       mail/calendars/contacts -> app_password
+#       aliases                 -> api_token
+#
+#   'api'       one API token for (almost) everything
+#       mail/contacts/aliases -> api_token
+#       calendars             -> caldav_app_password or app_password
+#                                (Fastmail's API has no calendar scope)
+mode = 'separate'
+
+# --- 'separate' mode ---
+mail_app_password    = ''    # app password with Mail (IMAP) access
+caldav_app_password  = ''    # app password with Calendars (CalDAV) access
+carddav_app_password = ''    # app password with Contacts (CardDAV) access
+
+# --- 'single' mode ---
+app_password = ''            # app password with Mail, Contacts & Calendars access
+
+# --- aliases (all modes), and mail + contacts in 'api' mode ---
+# Read-only API token. Scopes for aliases only: Email, Email submission, Masked Email.
+# For 'api' mode also add: Contacts and contact groups.
+api_token = ''

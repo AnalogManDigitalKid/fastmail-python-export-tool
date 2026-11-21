@@ -1,0 +1,15 @@
+# Real config holds secrets - only the .example file belongs in git
+fastmail-backup.toml
+
+# Backup output
+MailExport/
+CalendarExport/
+ContactExport/
+AliasExport/
+RulesExport/
+logs/
+
+# Python
+__pycache__/
+*.pyc
+*.part
